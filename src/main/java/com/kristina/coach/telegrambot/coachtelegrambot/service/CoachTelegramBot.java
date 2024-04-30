@@ -15,8 +15,6 @@ public class CoachTelegramBot extends MultiSessionTelegramBot {
 
     public CoachTelegramBot(TelegramBotsApi botsApi, TelegramBotProperties properties, CommandExecutorProvider commandExecutorProvider) throws TelegramApiException {
         super(properties.getName(), properties.getToken());
-        System.out.println(properties.getName());
-        System.out.println(properties.getToken());
         this.commandExecutorProvider = commandExecutorProvider;
         botsApi.registerBot(this);
         initMainMenu(properties.getCommands());
