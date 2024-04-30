@@ -1,1 +1,9 @@
-spring.application.name=coach-telegram-bot
+spring.application.name: coach-telegram-bot
+telegram-bot:
+  name: ${telegram_bot_name}
+  token: ${telegram_bot_token}
+  main-menu:
+    start: Начало работы
+    pfc: Расчитать БЖУ
+    foodweight: Расчитать вес готовой еды
+    about: Что я умею

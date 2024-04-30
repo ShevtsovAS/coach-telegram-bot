@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "telegram-bot.main-menu./about",
+      "type": "java.lang.String",
+      "description": "About command."
+    },
+    {
+      "name": "telegram-bot.main-menu./food-weight",
+      "type": "java.lang.String",
+      "description": "Calculate food weight command."
+    },
+    {
+      "name": "telegram-bot.main-menu./PFC",
+      "type": "java.lang.String",
+      "description": "Calculate Proteins Fats and Carbs."
+    },
+    {
+      "name": "telegram-bot.main-menu./start",
+      "type": "java.lang.String",
+      "description": "Start command."
+    }
+  ]
+}
