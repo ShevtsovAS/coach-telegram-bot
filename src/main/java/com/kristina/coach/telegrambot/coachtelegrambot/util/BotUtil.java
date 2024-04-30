@@ -1,5 +1,6 @@
 package com.kristina.coach.telegrambot.coachtelegrambot.util;
 
+import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -92,6 +93,22 @@ public class BotUtil {
 
     private static boolean isSpecCharacter(char c) {
         return specCharacters.contains(c);
+    }
+
+    public static Double getaDoubleValue(CoachTelegramBot bot, String inputMsg) {
+        double result;
+        try {
+            result = Double.parseDouble(inputMsg);
+        } catch (NumberFormatException e) {
+            bot.sendTextMessage("Это не похоже на число, введи числовое значение!");
+            return null;
+        }
+
+        if (result <= 0.0) {
+            bot.sendTextMessage("Введи число больше чем 0");
+            return null;
+        }
+        return result;
     }
 
 }

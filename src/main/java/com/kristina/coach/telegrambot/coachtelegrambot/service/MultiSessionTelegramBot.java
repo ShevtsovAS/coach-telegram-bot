@@ -6,7 +6,6 @@ import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.core.io.ClassPathResource;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -70,22 +69,20 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
         sendApiMethod(BotUtil.createMessage(getCurrentChatId(), text, buttons));
     }
 
-    public void sendPhotoMessage(String photoKey) {
-        sendPhotoMessage(photoKey, null, null);
+    public void sendPhotoMessage(InputFile photo) {
+        sendPhotoMessage(photo, null, null);
     }
 
-    public void sendPhotoMessage(String photoKey, String text) {
-        sendPhotoMessage(photoKey, text, null);
+    public void sendPhotoMessage(InputFile photo, String text) {
+        sendPhotoMessage(photo, text, null);
     }
 
-    public void sendPhotoMessage(String photoKey, Map<String, String> buttons) {
-        sendPhotoMessage(photoKey, null, buttons);
+    public void sendPhotoMessage(InputFile photo, Map<String, String> buttons) {
+        sendPhotoMessage(photo, null, buttons);
     }
 
     @SneakyThrows
-    public void sendPhotoMessage(String photoKey, String text, Map<String, String> buttons) {
-        ClassPathResource resource = new ClassPathResource(String.format("images/%s.jpg", photoKey));
-        InputFile photo = new InputFile(resource.getInputStream(), botUsername);
+    public void sendPhotoMessage(InputFile photo, String text, Map<String, String> buttons) {
         SendPhoto photoMessage = BotUtil.createPhotoMessage(getCurrentChatId(), photo, text, buttons);
         execute(photoMessage);
     }

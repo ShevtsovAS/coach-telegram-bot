@@ -9,13 +9,14 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class CommandExecutorProvider {
+public class CommandExecutorProvider implements Provider<CommandExecutor> {
 
     private final Map<String, CommandExecutor> commandExecutors;
     private final UnknownCommand unknownCommand;
 
-    public CommandExecutor getByMessage(String commandName) {
-        return commandExecutors.getOrDefault(commandName, unknownCommand);
+    @Override
+    public CommandExecutor get(String key) {
+        return commandExecutors.getOrDefault(key, unknownCommand);
     }
 
 }

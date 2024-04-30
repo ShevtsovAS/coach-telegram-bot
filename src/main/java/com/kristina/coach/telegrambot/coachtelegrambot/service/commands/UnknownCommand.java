@@ -11,12 +11,15 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public final class UnknownCommand implements CommandExecutor {
 
-    public static final String NAME = "unknown";
+    public static final String NAME = "unknownCommand";
 
     @Override
     public void execute(CoachTelegramBot bot) {
         if (StringUtils.isBlank(bot.getCallbackQueryButtonKey())) {
-            log.info("Unknown command was received - {}", bot.getMessageText());
+            String messageText = bot.getMessageText();
+            if (messageText.startsWith("/")) {
+                log.info("Unknown command was received - {}", messageText);
+            }
         }
     }
 
