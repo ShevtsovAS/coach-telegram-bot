@@ -1,14 +1,14 @@
 package com.kristina.coach.telegrambot.coachtelegrambot.service;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.config.TelegramBotProperties;
+import com.kristina.coach.telegrambot.coachtelegrambot.model.EventType;
 import com.kristina.coach.telegrambot.coachtelegrambot.model.Food;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.commands.CommandExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.ButtonHandler;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.provider.Provider;
-import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.StepExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.DefaultStep;
+import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.StepExecutor;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -41,21 +41,12 @@ public class CoachTelegramBot extends MultiSessionTelegramBot {
     }
 
     @Override
-    public void onUpdateEventReceived() {
-        String message = getMessageText();
-        if (isCommandReceivedEvent(message)) {
-            commandExecutorProvider.get(message).execute(this);
-            return;
+    public void onUpdateEventReceived(EventType eventType) {
+        switch (eventType) {
+            case COMMAND_RECEIVED -> commandExecutorProvider.get(getMessageText()).execute(this);
+            case BUTTON_PRESSED -> buttonHandlerProvider.get(getCallbackQueryButtonKey()).execute(this);
+            case STEP_EXECUTION -> getCurrentStep().execute(this, getMessageText());
         }
-
-        String buttonKey = getCallbackQueryButtonKey();
-        if (isButtonPressedEvent(buttonKey)) {
-            buttonHandlerProvider.get(buttonKey).execute(this);
-            return;
-        }
-
-        getCurrentStep().execute(this, message);
-
     }
 
     public void setCurrentStep(String name) {
@@ -80,15 +71,7 @@ public class CoachTelegramBot extends MultiSessionTelegramBot {
         return foods.getOrDefault(getCurrentChatId(), new Food());
     }
 
-    private StepExecutor getCurrentStep() {
+    public StepExecutor getCurrentStep() {
         return stepExecutors.getOrDefault(getCurrentChatId(), stepExecutorProvider.get(DefaultStep.NAME));
-    }
-
-    private boolean isButtonPressedEvent(String buttonKey) {
-        return StringUtils.isNotBlank(buttonKey);
-    }
-
-    private boolean isCommandReceivedEvent(String message) {
-        return message.startsWith("/");
     }
 }

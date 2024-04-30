@@ -1,6 +1,7 @@
 package com.kristina.coach.telegrambot.coachtelegrambot.service;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.method.GetBotDescription;
+import com.kristina.coach.telegrambot.coachtelegrambot.model.EventType;
 import com.kristina.coach.telegrambot.coachtelegrambot.model.MyBotDescription;
 import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import lombok.Getter;
@@ -39,11 +40,11 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
     @Override
     public final void onUpdateReceived(Update updateEvent) {
         this.updateEvent.set(updateEvent);
-        onUpdateEventReceived();
+        onUpdateEventReceived(EventType.of(this));
         answerCallbackQuery();
     }
 
-    public abstract void onUpdateEventReceived();
+    public abstract void onUpdateEventReceived(EventType eventType);
 
     public String getMessageText() {
         return Optional.ofNullable(updateEvent.get())

@@ -98,7 +98,7 @@ public class BotUtil {
     public static Double getaDoubleValue(CoachTelegramBot bot, String inputMsg) {
         double result;
         try {
-            result = Double.parseDouble(inputMsg);
+            result = Double.parseDouble(inputMsg.replace(',', '.'));
         } catch (NumberFormatException e) {
             bot.sendTextMessage("Это не похоже на число, введи числовое значение!");
             return null;
