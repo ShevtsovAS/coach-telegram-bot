@@ -2,6 +2,7 @@ package com.kristina.coach.telegrambot.coachtelegrambot.util;
 
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -11,10 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 @UtilityClass
 public class KeyboardCreator {
 
-    public static ReplyKeyboardMarkup createReplyKeyboardMarkup(Set<String> buttons) {
+    public static ReplyKeyboard createReplyKeyboardMarkup(Set<String> buttons) {
         if (buttons == null || buttons.isEmpty()) {
             return null;
         }
@@ -35,7 +37,7 @@ public class KeyboardCreator {
                 .build();
     }
 
-    public static InlineKeyboardMarkup createInlineKeyboardMarkup(Map<String, String> buttons) {
+    public static ReplyKeyboard createInlineKeyboardMarkup(Map<String, String> buttons) {
         if (buttons == null || buttons.isEmpty()) {
             return null;
         }
@@ -48,10 +50,30 @@ public class KeyboardCreator {
         return new InlineKeyboardMarkup(keyboard);
     }
 
+    public static ReplyKeyboard createUrlKeyboardMarkup(Map<String, String> buttons) {
+        if (buttons == null || buttons.isEmpty()) {
+            return null;
+        }
+
+        List<List<InlineKeyboardButton>> keyboard = buttons.entrySet().stream()
+                .map(KeyboardCreator::createUrlButton)
+                .map(List::of)
+                .toList();
+
+        return new InlineKeyboardMarkup(keyboard);
+    }
+
     public static InlineKeyboardButton createInlineKeyboardButton(Map.Entry<String, String> entry) {
         return InlineKeyboardButton.builder()
                 .text(entry.getKey())
                 .callbackData(entry.getValue())
+                .build();
+    }
+
+    public static InlineKeyboardButton createUrlButton(Map.Entry<String, String> entry) {
+        return InlineKeyboardButton.builder()
+                .text(entry.getKey())
+                .url(entry.getValue())
                 .build();
     }
 

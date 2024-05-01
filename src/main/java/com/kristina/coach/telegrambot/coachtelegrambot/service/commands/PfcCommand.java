@@ -12,7 +12,7 @@ public final class PfcCommand implements CommandExecutor {
 
     @Override
     public void execute(CoachTelegramBot bot) {
-        bot.sendTextMessage("Я ещё нихера не умею, но скоро научусь, здесь будет обрабатываться комманда /pfc");
+        bot.sendTextMessage("Данный функционал находится в разработке, обратись с этим вопросом немного позднее, я скоро обязательно научусь!");
     }
 
 }

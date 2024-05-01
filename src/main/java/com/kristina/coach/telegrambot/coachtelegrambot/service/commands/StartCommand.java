@@ -2,13 +2,14 @@ package com.kristina.coach.telegrambot.coachtelegrambot.service.commands;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.FoodWeightButtonHandler;
+import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.PfcButtonHandler;
 import com.kristina.coach.telegrambot.coachtelegrambot.util.KeyboardCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ public final class StartCommand implements CommandExecutor {
 
     private static Map<String, String> creatStartButtons() {
         Map<String, String> buttons = new LinkedHashMap<>();
-        buttons.put("Расчитать БЖУ", "pfc_btn");
+        buttons.put("Расчитать БЖУ", PfcButtonHandler.NAME);
         buttons.put("Расчитать вес готовой еды", FoodWeightButtonHandler.NAME);
         return buttons;
     }
@@ -31,9 +32,10 @@ public final class StartCommand implements CommandExecutor {
     @SneakyThrows
     @Override
     public void execute(CoachTelegramBot bot) {
-        InputFile photo = new InputFile(new ClassPathResource("images/start.png").getInputStream(), bot.getBotUsername());
+        String userNameFrom = bot.getUserNameFrom();
+        InputFile photo = new InputFile(new ClassPathResource("images/start.jpg").getInputStream(), bot.getBotUsername());
         String text = new String(new ClassPathResource("messages/start.txt").getContentAsByteArray());
-        InlineKeyboardMarkup keyboardMarkup = KeyboardCreator.createInlineKeyboardMarkup(START_BUTTONS);
-        bot.sendPhotoMessage(photo, text, keyboardMarkup);
+        ReplyKeyboard keyboardMarkup = KeyboardCreator.createInlineKeyboardMarkup(START_BUTTONS);
+        bot.sendPhotoMessage(photo, String.format(text, userNameFrom), keyboardMarkup);
     }
 }

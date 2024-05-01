@@ -6,4 +6,5 @@ telegram-bot:
     start: Начало работы
     pfc: Расчитать БЖУ
     foodweight: Расчитать вес готовой еды
-    about: Что я умею
+    contact: Связаться со мной
+    about: Описание

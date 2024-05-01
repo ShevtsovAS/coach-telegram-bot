@@ -135,4 +135,15 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
         execute(new SetMyCommands(commands, new BotCommandScopeDefault(), null));
     }
 
+    public String getUserNameFrom() {
+        Optional<String> userNameFromMessage = Optional.ofNullable(updateEvent.get())
+                .map(Update::getMessage)
+                .map(Message::getFrom)
+                .map(User::getFirstName);
+        Optional<String> userNameFromCallbackQuery = Optional.ofNullable(updateEvent.get())
+                .map(Update::getCallbackQuery)
+                .map(CallbackQuery::getFrom)
+                .map(User::getFirstName);
+        return userNameFromMessage.or(() -> userNameFromCallbackQuery).orElse("дорогой друг");
+    }
 }
