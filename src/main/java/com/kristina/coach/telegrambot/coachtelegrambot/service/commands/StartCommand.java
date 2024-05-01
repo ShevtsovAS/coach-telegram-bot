@@ -2,11 +2,13 @@ package com.kristina.coach.telegrambot.coachtelegrambot.service.commands;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.FoodWeightButtonHandler;
+import com.kristina.coach.telegrambot.coachtelegrambot.util.KeyboardCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,6 +33,7 @@ public final class StartCommand implements CommandExecutor {
     public void execute(CoachTelegramBot bot) {
         InputFile photo = new InputFile(new ClassPathResource("images/start.png").getInputStream(), bot.getBotUsername());
         String text = new String(new ClassPathResource("messages/start.txt").getContentAsByteArray());
-        bot.sendPhotoMessage(photo, text, START_BUTTONS);
+        InlineKeyboardMarkup keyboardMarkup = KeyboardCreator.createInlineKeyboardMarkup(START_BUTTONS);
+        bot.sendPhotoMessage(photo, text, keyboardMarkup);
     }
 }

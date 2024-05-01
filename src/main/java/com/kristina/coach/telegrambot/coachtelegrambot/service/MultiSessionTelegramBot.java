@@ -14,9 +14,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("unused")
@@ -66,8 +66,8 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
     }
 
     @SneakyThrows
-    public void sendTextMessage(String text, Map<String, String> buttons) {
-        sendApiMethod(BotUtil.createMessage(getCurrentChatId(), text, buttons));
+    public void sendTextMessage(String text, ReplyKeyboard replyMarkup) {
+        sendApiMethod(BotUtil.createMessage(getCurrentChatId(), text, replyMarkup));
     }
 
     public void sendPhotoMessage(InputFile photo) {
@@ -78,13 +78,13 @@ public abstract class MultiSessionTelegramBot extends TelegramLongPollingBot {
         sendPhotoMessage(photo, text, null);
     }
 
-    public void sendPhotoMessage(InputFile photo, Map<String, String> buttons) {
-        sendPhotoMessage(photo, null, buttons);
+    public void sendPhotoMessage(InputFile photo, ReplyKeyboard replyMarkup) {
+        sendPhotoMessage(photo, null, replyMarkup);
     }
 
     @SneakyThrows
-    public void sendPhotoMessage(InputFile photo, String text, Map<String, String> buttons) {
-        SendPhoto photoMessage = BotUtil.createPhotoMessage(getCurrentChatId(), photo, text, buttons);
+    public void sendPhotoMessage(InputFile photo, String text, ReplyKeyboard replyMarkup) {
+        SendPhoto photoMessage = BotUtil.createPhotoMessage(getCurrentChatId(), photo, text, replyMarkup);
         execute(photoMessage);
     }
 

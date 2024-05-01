@@ -8,8 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +22,6 @@ public class BotUtil {
 
     public static Set<Character> specCharacters = Set.of('_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '=', '|', '{', '}', '.');
 
-    public static InlineKeyboardButton createButton(Map.Entry<String, String> entry) {
-        return InlineKeyboardButton.builder()
-                .text(entry.getKey())
-                .callbackData(entry.getValue())
-                .build();
-    }
-
     public static AnswerCallbackQuery createAnswer(String id, String text, boolean showAlert) {
         return AnswerCallbackQuery.builder()
                 .callbackQueryId(id)
@@ -38,36 +30,23 @@ public class BotUtil {
                 .build();
     }
 
-    public static InlineKeyboardMarkup createInlineKeyboardMarkup(Map<String, String> buttons) {
-        if (buttons == null || buttons.isEmpty()) {
-            return null;
-        }
-
-        List<List<InlineKeyboardButton>> keyboard = buttons.entrySet().stream()
-                .map(BotUtil::createButton)
-                .map(List::of)
-                .toList();
-
-        return new InlineKeyboardMarkup(keyboard);
-    }
-
     @SneakyThrows
-    public static SendPhoto createPhotoMessage(Long chatId, InputFile photo, String text, Map<String, String> buttons) {
+    public static SendPhoto createPhotoMessage(Long chatId, InputFile photo, String text, ReplyKeyboard replyMarkup) {
         return SendPhoto.builder()
                 .chatId(chatId)
                 .photo(photo)
                 .parseMode(MARKDOWN)
                 .caption(text)
-                .replyMarkup(createInlineKeyboardMarkup(buttons))
+                .replyMarkup(replyMarkup)
                 .build();
     }
 
-    public static SendMessage createMessage(Long chatId, String text, Map<String, String> buttons) {
+    public static SendMessage createMessage(Long chatId, String text, ReplyKeyboard replyMarkup) {
         return SendMessage.builder()
                 .chatId(chatId)
                 .text(text)
                 .parseMode(MARKDOWN)
-                .replyMarkup(BotUtil.createInlineKeyboardMarkup(buttons))
+                .replyMarkup(replyMarkup)
                 .build();
     }
 
