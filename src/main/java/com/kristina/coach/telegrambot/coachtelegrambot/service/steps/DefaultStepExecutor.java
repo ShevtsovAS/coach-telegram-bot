@@ -5,15 +5,21 @@ import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
-@Component(DefaultStep.NAME)
-public class DefaultStep implements StepExecutor {
+@Component(DefaultStepExecutor.NAME)
+public class DefaultStepExecutor extends AbstractStepExecutor {
 
     public static final String NAME = "defaultStep";
 
     @SneakyThrows
     @Override
-    public void execute(CoachTelegramBot bot, String inputMsg) {
+    public boolean executeStep(CoachTelegramBot bot, String inputMsg) {
         String text = new String(new ClassPathResource("messages/unknown-step.txt").getContentAsByteArray());
         bot.sendTextMessage(text);
+        return false;
+    }
+
+    @Override
+    public Step getCurrentStep() {
+        return null;
     }
 }

@@ -3,10 +3,11 @@ package com.kristina.coach.telegrambot.coachtelegrambot.service;
 import com.kristina.coach.telegrambot.coachtelegrambot.config.TelegramBotProperties;
 import com.kristina.coach.telegrambot.coachtelegrambot.model.EventType;
 import com.kristina.coach.telegrambot.coachtelegrambot.model.Food;
+import com.kristina.coach.telegrambot.coachtelegrambot.model.UserBodyData;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.commands.CommandExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.ButtonHandler;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.providers.Provider;
-import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.DefaultStep;
+import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.DefaultStepExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.StepExecutor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class CoachTelegramBot extends MultiSessionTelegramBot {
     private final Provider<StepExecutor> stepExecutorProvider;
     private final Map<Long, StepExecutor> stepExecutors = new HashMap<>();
     private final Map<Long, Food> foods = new HashMap<>();
+    private final Map<Long, UserBodyData> userBodyData = new HashMap<>();
 
 
     public CoachTelegramBot(TelegramBotsApi botsApi,
@@ -49,29 +51,20 @@ public class CoachTelegramBot extends MultiSessionTelegramBot {
         }
     }
 
+    public StepExecutor getCurrentStep() {
+        return stepExecutors.getOrDefault(getCurrentChatId(), stepExecutorProvider.get(DefaultStepExecutor.NAME));
+    }
+
     public void setCurrentStep(String name) {
         stepExecutors.put(getCurrentChatId(), stepExecutorProvider.get(name));
     }
 
-    public void setRawFoodWeight(double rawFoodWeight) {
-        Long chatId = getCurrentChatId();
-        Food food = getUserFood();
-        food.setRawWeight(rawFoodWeight);
-        foods.putIfAbsent(chatId, food);
-    }
-
-    public void setCookedFoodWeight(double cookedFoodWeight) {
-        Long chatId = getCurrentChatId();
-        Food food = getUserFood();
-        food.setCookedWeight(cookedFoodWeight);
-        foods.putIfAbsent(chatId, food);
-    }
-
     public Food getUserFood() {
-        return foods.getOrDefault(getCurrentChatId(), new Food());
+        return foods.computeIfAbsent(getCurrentChatId(), chatId -> new Food());
     }
 
-    public StepExecutor getCurrentStep() {
-        return stepExecutors.getOrDefault(getCurrentChatId(), stepExecutorProvider.get(DefaultStep.NAME));
+    public UserBodyData getUserBodyData() {
+        return userBodyData.computeIfAbsent(getCurrentChatId(), chatId -> new UserBodyData());
     }
+
 }

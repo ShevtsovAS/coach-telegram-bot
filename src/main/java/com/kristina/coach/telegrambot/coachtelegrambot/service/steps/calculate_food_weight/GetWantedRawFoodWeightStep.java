@@ -1,9 +1,12 @@
-package com.kristina.coach.telegrambot.coachtelegrambot.service.steps;
+package com.kristina.coach.telegrambot.coachtelegrambot.service.steps.calculate_food_weight;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.model.Food;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.commands.CalculateFoodWeightCommand;
+import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.AbstractStepExecutor;
+import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.Step;
 import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -11,27 +14,30 @@ import org.springframework.stereotype.Component;
 import java.text.DecimalFormat;
 import java.util.Optional;
 
+import static com.kristina.coach.telegrambot.coachtelegrambot.service.steps.calculate_food_weight.CalcFoodWeightSteps.GET_WANTED_RAW_FOOD_WEIGHT;
 import static java.math.RoundingMode.HALF_UP;
 
+@Getter
 @Component(GetWantedRawFoodWeightStep.NAME)
-public class GetWantedRawFoodWeightStep implements StepExecutor {
+public class GetWantedRawFoodWeightStep extends AbstractStepExecutor {
 
     public static final String NAME = "getWantedRawFoodWeightStep";
-    public static final DecimalFormat DF = new DecimalFormat("#.##");
+    private static final DecimalFormat DF = new DecimalFormat("#.##");
+    private final Step currentStep = GET_WANTED_RAW_FOOD_WEIGHT;
 
     static {
         DF.setRoundingMode(HALF_UP);
     }
 
-    @SneakyThrows
     @Override
-    public void execute(CoachTelegramBot bot, String inputMsg) {
-        Optional.ofNullable(BotUtil.getaDoubleValue(bot, inputMsg))
-                .ifPresent(wantedRawFoodWeight -> calculateResult(bot, wantedRawFoodWeight));
+    public boolean executeStep(CoachTelegramBot bot, String inputMsg) {
+        return Optional.ofNullable(BotUtil.getaDoubleValue(bot, inputMsg))
+                .map(wantedRawFoodWeight -> calculateResult(bot, wantedRawFoodWeight))
+                .orElse(false);
     }
 
     @SneakyThrows
-    private static void calculateResult(CoachTelegramBot bot, double wantedRawFoodWeight) {
+    private static boolean calculateResult(CoachTelegramBot bot, double wantedRawFoodWeight) {
         Food userFood = bot.getUserFood();
         Double rawWeight = userFood.getRawWeight();
         Double cookedWeight = userFood.getCookedWeight();
@@ -39,7 +45,7 @@ public class GetWantedRawFoodWeightStep implements StepExecutor {
             String text = new String(new ClassPathResource("messages/food-lost.txt").getContentAsByteArray());
             bot.sendTextMessage(text);
             bot.getCommandExecutorProvider().get(CalculateFoodWeightCommand.NAME).execute(bot);
-            return;
+            return false;
         }
 
         try {
@@ -48,8 +54,8 @@ public class GetWantedRawFoodWeightStep implements StepExecutor {
             bot.sendTextMessage(String.format(text, DF.format(wantedRawFoodWeight), DF.format(result)));
         } catch (Exception e) {
             bot.sendTextMessage("Что то пошло не так, произошла ошибка при вычислении");
-        } finally {
-            bot.setCurrentStep(DefaultStep.NAME);
         }
+
+        return true;
     }
 }

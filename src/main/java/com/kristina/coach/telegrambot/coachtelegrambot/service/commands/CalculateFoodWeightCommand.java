@@ -1,7 +1,7 @@
 package com.kristina.coach.telegrambot.coachtelegrambot.service.commands;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
-import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.GetRawFoodWeightStep;
+import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.calculate_food_weight.CalcFoodWeightSteps;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,8 @@ public final class CalculateFoodWeightCommand implements CommandExecutor {
 
     @Override
     public void execute(CoachTelegramBot bot) {
-        bot.setCurrentStep(GetRawFoodWeightStep.NAME);
-        bot.sendTextMessage("Введи вес еды в сыром виде (в граммах)");
+        var calcFoodWeightStep = CalcFoodWeightSteps.getStart();
+        bot.setCurrentStep(calcFoodWeightStep.getStepExecutorName());
+        bot.sendTextMessage(calcFoodWeightStep.getMessage(), calcFoodWeightStep.getReplyKeyboard());
     }
 }
