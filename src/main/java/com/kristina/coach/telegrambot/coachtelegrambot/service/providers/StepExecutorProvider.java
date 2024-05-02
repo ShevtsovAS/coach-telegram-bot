@@ -1,4 +1,4 @@
-package com.kristina.coach.telegrambot.coachtelegrambot.service.provider;
+package com.kristina.coach.telegrambot.coachtelegrambot.service.providers;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.StepExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.DefaultStep;

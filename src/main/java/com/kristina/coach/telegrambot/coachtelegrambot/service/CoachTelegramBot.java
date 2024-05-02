@@ -5,7 +5,7 @@ import com.kristina.coach.telegrambot.coachtelegrambot.model.EventType;
 import com.kristina.coach.telegrambot.coachtelegrambot.model.Food;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.commands.CommandExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.ButtonHandler;
-import com.kristina.coach.telegrambot.coachtelegrambot.service.provider.Provider;
+import com.kristina.coach.telegrambot.coachtelegrambot.service.providers.Provider;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.DefaultStep;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.StepExecutor;
 import lombok.Getter;

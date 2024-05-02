@@ -1,4 +1,4 @@
-package com.kristina.coach.telegrambot.coachtelegrambot.service.provider;
+package com.kristina.coach.telegrambot.coachtelegrambot.service.providers;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.commands.CommandExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.commands.UnknownCommand;
