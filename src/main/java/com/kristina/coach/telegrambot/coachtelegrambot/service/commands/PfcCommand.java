@@ -2,9 +2,9 @@ package com.kristina.coach.telegrambot.coachtelegrambot.service.commands;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.calculate_pfc.CalculatePfcSteps;
+import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component(PfcCommand.NAME)
@@ -16,8 +16,7 @@ public final class PfcCommand implements CommandExecutor {
     @SneakyThrows
     @Override
     public void execute(CoachTelegramBot bot) {
-        var text = new String(new ClassPathResource("messages/collect-body-info.txt").getContentAsByteArray());
-        bot.sendTextMessage(text);
+        bot.sendTextMessage(BotUtil.getMessageFromResource("collect-body-info"));
 
         var startStep = CalculatePfcSteps.getStart();
         bot.sendTextMessage(startStep.getMessage(), startStep.getReplyKeyboard());

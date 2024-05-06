@@ -6,11 +6,11 @@ import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.calculator.PfsCalculator;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.AbstractStepExecutor;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.Step;
+import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
@@ -43,7 +43,7 @@ public class GetWorkoutModeStep extends AbstractStepExecutor {
     @SneakyThrows
     private boolean calculateResult(CoachTelegramBot bot) {
         val result = pfsCalculator.calculate(bot.getUserBodyData());
-        val text = new String(new ClassPathResource("messages/calculate-pfc-result.txt").getContentAsByteArray())
+        val text = BotUtil.getMessageFromResource("calculate-pfc-result")
                 .replace("{BMI}", DF.format(result.getBodyMassIndexValue()))
                 .replace("{BMI_DESCRIPTION}", BodyMassIndex.get(result.getBodyMassIndexValue()).getDescription())
                 .replace("{GOAL}", bot.getUserBodyData().getGoal().getKey())

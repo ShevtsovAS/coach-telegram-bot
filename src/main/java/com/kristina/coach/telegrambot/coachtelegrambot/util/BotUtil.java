@@ -3,6 +3,7 @@ package com.kristina.coach.telegrambot.coachtelegrambot.util;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import org.springframework.core.io.ClassPathResource;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
@@ -88,6 +89,11 @@ public class BotUtil {
             return null;
         }
         return result;
+    }
+
+    @SneakyThrows
+    public static String getMessageFromResource(String key) {
+        return new String(new ClassPathResource(String.format("messages/%s.txt", key)).getContentAsByteArray());
     }
 
 }

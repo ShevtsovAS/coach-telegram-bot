@@ -8,7 +8,6 @@ import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.Step;
 import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.text.DecimalFormat;
@@ -42,15 +41,14 @@ public class GetWantedRawFoodWeightStep extends AbstractStepExecutor {
         Double rawWeight = userFood.getRawWeight();
         Double cookedWeight = userFood.getCookedWeight();
         if (rawWeight == null || cookedWeight == null) {
-            String text = new String(new ClassPathResource("messages/food-lost.txt").getContentAsByteArray());
-            bot.sendTextMessage(text);
+            bot.sendTextMessage(BotUtil.getMessageFromResource("food-lost"));
             bot.getCommandExecutorProvider().get(CalculateFoodWeightCommand.NAME).execute(bot);
             return false;
         }
 
         try {
             Double result = wantedRawFoodWeight / (rawWeight / cookedWeight);
-            String text = new String(new ClassPathResource("messages/food-weight-calculation-result.txt").getContentAsByteArray());
+            String text = BotUtil.getMessageFromResource("food-weight-calculation-result");
             bot.sendTextMessage(String.format(text, DF.format(wantedRawFoodWeight), DF.format(result)));
         } catch (Exception e) {
             bot.sendTextMessage("Что то пошло не так, произошла ошибка при вычислении");

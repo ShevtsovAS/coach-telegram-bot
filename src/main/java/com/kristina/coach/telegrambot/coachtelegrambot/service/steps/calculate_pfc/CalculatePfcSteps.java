@@ -1,10 +1,10 @@
 package com.kristina.coach.telegrambot.coachtelegrambot.service.steps.calculate_pfc;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.Step;
+import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.core.io.ClassPathResource;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 
@@ -49,6 +49,6 @@ public enum CalculatePfcSteps implements Step {
 
     @SneakyThrows
     private static String getActivityFactorStepText() {
-        return new String(new ClassPathResource("messages/get-activity-factor-step.txt").getContentAsByteArray());
+        return BotUtil.getMessageFromResource("get-activity-factor-step");
     }
 }

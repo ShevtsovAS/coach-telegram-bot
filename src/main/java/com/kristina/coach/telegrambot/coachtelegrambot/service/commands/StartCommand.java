@@ -4,6 +4,7 @@ import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.FoodWeightButtonHandler;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.handlers.PfcButtonHandler;
 import com.kristina.coach.telegrambot.coachtelegrambot.service.steps.DefaultStepExecutor;
+import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import com.kristina.coach.telegrambot.coachtelegrambot.util.KeyboardCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -37,7 +38,7 @@ public final class StartCommand implements CommandExecutor {
         String userNameFrom = bot.getUserNameFrom();
         bot.sendTextMessage(String.format("Привет %s!", userNameFrom), new ReplyKeyboardRemove(true));
         InputFile photo = new InputFile(new ClassPathResource("images/start.jpg").getInputStream(), bot.getBotUsername());
-        String text = new String(new ClassPathResource("messages/start.txt").getContentAsByteArray());
+        String text = BotUtil.getMessageFromResource("start");
         ReplyKeyboard keyboardMarkup = KeyboardCreator.createInlineKeyboardMarkup(START_BUTTONS);
         bot.sendPhotoMessage(photo, String.format(text, userNameFrom), keyboardMarkup);
         bot.setCurrentStep(DefaultStepExecutor.NAME);

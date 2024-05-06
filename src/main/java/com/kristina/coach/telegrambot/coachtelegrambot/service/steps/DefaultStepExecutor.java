@@ -1,8 +1,8 @@
 package com.kristina.coach.telegrambot.coachtelegrambot.service.steps;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
+import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import lombok.SneakyThrows;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component(DefaultStepExecutor.NAME)
@@ -13,8 +13,7 @@ public class DefaultStepExecutor extends AbstractStepExecutor {
     @SneakyThrows
     @Override
     public boolean executeStep(CoachTelegramBot bot, String inputMsg) {
-        String text = new String(new ClassPathResource("messages/unknown-step.txt").getContentAsByteArray());
-        bot.sendTextMessage(text);
+        bot.sendTextMessage(BotUtil.getMessageFromResource("unknown-step"));
         return false;
     }
 

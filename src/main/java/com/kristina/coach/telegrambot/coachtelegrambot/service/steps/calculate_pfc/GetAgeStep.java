@@ -31,7 +31,7 @@ public class GetAgeStep extends AbstractStepExecutor {
                         return true;
                     }
 
-                    bot.sendTextMessage("Вы уверенны? Введи значение ещё раз если да");
+                    bot.sendTextMessage(BotUtil.getMessageFromResource("unexpected-value"));
                     return false;
                 }).orElse(false);
     }

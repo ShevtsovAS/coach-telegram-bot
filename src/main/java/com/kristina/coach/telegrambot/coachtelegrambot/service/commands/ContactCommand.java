@@ -1,6 +1,7 @@
 package com.kristina.coach.telegrambot.coachtelegrambot.service.commands;
 
 import com.kristina.coach.telegrambot.coachtelegrambot.service.CoachTelegramBot;
+import com.kristina.coach.telegrambot.coachtelegrambot.util.BotUtil;
 import com.kristina.coach.telegrambot.coachtelegrambot.util.KeyboardCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -32,7 +33,7 @@ public final class ContactCommand implements CommandExecutor {
     @Override
     public void execute(CoachTelegramBot bot) {
         InputFile photo = new InputFile(new ClassPathResource("images/contact.jpg").getInputStream(), bot.getBotUsername());
-        String text = new String(new ClassPathResource("messages/contact-info.txt").getContentAsByteArray());
+        String text = BotUtil.getMessageFromResource("contact-info");
         ReplyKeyboard keyboardMarkup = KeyboardCreator.createUrlKeyboardMarkup(BUTTONS);
         bot.sendPhotoMessage(photo, text, keyboardMarkup);
     }
